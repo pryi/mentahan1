@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Login dan Registrasi</title>
+    <style>
+      body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 250px;
+        }
+        .form {
+            display: flex;
+            flex-direction: column;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        input[type="text"],
+        input[type="password"] {
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        .btn {
+            background-color: #49de2f;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #0b7430;
+        }
+        .switch-form {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .switch-form a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .switch-form a:hover {
+            text-decoration: underline;
+        }
+              /* Add these styles to your existing CSS */
+        .password-container {
+          position: relative;
+          display: flex;
+          align-items: center;
+        }
+        .password-container input[type="password"],
+        .password-container input[type="text"] {
+          width: 100%;
+          padding-right: 40px;
+        }
+        .toggle-password {
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: #333;
+          cursor: pointer;
+          padding: 0;
+          font-size: 16px;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <form id="loginForm" class="form">
+          <h2>Login</h2>
+          <input type="text" id="username" name="username" placeholder="Username" required>
+          <div class="password-container">
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('password')"></i>
+          </div>
+          <button type="submit" class="btn">Login</button>
+          <p class="switch-form">Belum punya akun? <a href="#" onclick="toggleForm()">Daftar sekarang</a></p>
+      </form>
+
+      <form id="registerForm" class="form" style="display:none;">
+          <h2>Registrasi</h2>
+          <input type="text" id="newUsername" name="newUsername" placeholder="Username" required>
+          <div class="password-container">
+            <input type="password" id="newPassword" name="newPassword" placeholder="Password" required>
+            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('newPassword')"></i>
+          </div>
+          <button type="submit" class="btn">Registrasi</button>
+          <p class="switch-form">Sudah punya akun? <a href="#" onclick="toggleForm()">Login sekarang</a></p>
+      </form>
+
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          var username = document.getElementById("username").value;
+          var password = document.getElementById("password").value;
+
+          var registeredUsername = localStorage.getItem("registeredUsername");
+          var registeredPassword = localStorage.getItem("registeredPassword");
+
+          if (
+            username === registeredUsername &&
+            password === registeredPassword
+          ) {
+            window.location.href = "beranda.html";
+          } else {
+            alert("Login gagal. Username atau password salah.");
+          }
+        });
+
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          var newUsername = document.getElementById("newUsername").value;
+          var newPassword = document.getElementById("newPassword").value;
+
+          localStorage.setItem("registeredUsername", newUsername);
+          localStorage.setItem("registeredPassword", newPassword);
+
+          alert("Registrasi berhasil. Silakan login.");
+          toggleForm();
+        });
+
+        function toggleForm() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            loginForm.style.display = loginForm.style.display === 'none' ? 'flex' : 'none';
+            registerForm.style.display = registerForm.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function togglePasswordVisibility(inputId) {
+        const passwordInput = document.getElementById(inputId);
+        const icon = passwordInput.nextElementSibling;
+
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          icon.classList.remove("fa-eye");
+          icon.classList.add("fa-eye-slash");
+        } else {
+          passwordInput.type = "password";
+          icon.classList.remove("fa-eye-slash");
+          icon.classList.add("fa-eye");
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Our Website</title>
+    <style>
+      .tutorial-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+      .tutorial-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+        text-align: center;
+      }
+      .tutorial-step {
+        display: none;
+      }
+      .tutorial-step.active {
+        display: block;
+      }
+      .checkbox-wrapper {
+        position: relative;
+        display: inline-block;
+      }
+      .spinner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        display: none;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="tutorial" class="tutorial-overlay">
+      <div class="tutorial-content">
+        <div class="tutorial-step active" data-step="1">
+          <h2>Welcome to Our Website!</h2>
+          <p>
+            Silahkan Klik Tombol <i><b>Next</b></i> Untuk Melanjutkan!.
+          </p>
+          <button onclick="nextStep()">Next</button>
+        </div>
+        <div class="tutorial-step" data-step="2">
+          <h2>CAPTCHA Verification</h2>
+          <p>Please click the checkbox below to verify you're human.</p>
+          <div class="captcha-container">
+            <div class="checkbox-wrapper">
+              <input
+                type="checkbox"
+                id="captcha-checkbox"
+                onclick="verifyCaptcha()"
+              />
+              <div class="spinner"></div>
+            </div>
+            <label for="captcha-checkbox">I'm not a robot</label>
+          </div>
+          <button onclick="nextStep()" id="next-button" disabled>Next</button>
+        </div>
+        <div class="tutorial-step" data-step="3">
+          <h2>You're All Set!</h2>
+          <p>Enjoy using our website.</p>
+          <button onclick="closeTutorial()">Get Started</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Your main website content goes here -->
+
+    <script>
+      let currentStep = 1;
+      const totalSteps = 3;
+
+      function nextStep() {
+        document
+          .querySelector(`.tutorial-step[data-step="${currentStep}"]`)
+          .classList.remove("active");
+        currentStep++;
+        if (currentStep <= totalSteps) {
+          document
+            .querySelector(`.tutorial-step[data-step="${currentStep}"]`)
+            .classList.add("active");
+
+          // Reset CAPTCHA if moving from step 3
+          if (currentStep === 3) {
+            resetCaptcha();
+          }
+        } else {
+          closeTutorial();
+        }
+      }
+
+      function closeTutorial() {
+        document.getElementById("tutorial").style.display = "none";
+        window.location.href = "beranda.html";
+      }
+
+      function verifyCaptcha() {
+        var checkbox = document.getElementById("captcha-checkbox");
+        var nextButton = document.getElementById("next-button");
+        var spinner = document.querySelector(".spinner");
+
+        if (checkbox.checked) {
+          spinner.style.display = "block";
+          checkbox.style.visibility = "hidden";
+          setTimeout(function () {
+            spinner.style.display = "none";
+            checkbox.style.visibility = "visible";
+            nextButton.disabled = false;
+          }, 1500);
+        } else {
+          nextButton.disabled = true;
+        }
+      }
+
+      function resetCaptcha() {
+        var checkbox = document.getElementById("captcha-checkbox");
+        var nextButton = document.getElementById("next-button");
+
+        checkbox.checked = false;
+        nextButton.disabled = true;
+      }
+    </script>
+  </body>
+</html>
